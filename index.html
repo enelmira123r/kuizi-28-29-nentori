@@ -926,3 +926,144 @@ if(typeof confetti==='function'){const _cf=confetti;confetti=function(){_cf.appl
 })();
 </script>
 <!-- ===== /FX LAYER ===== -->
+<!-- ===== FX2 LAYER: more animations ===== -->
+<style>
+.fx-prog{position:fixed;left:0;top:0;height:3px;width:100%;z-index:60;transform-origin:0 50%;transform:scaleX(0);background:linear-gradient(90deg,#E41E20,#ff7a3c,#C9A24A);box-shadow:0 0 12px rgba(228,30,32,.8)}
+.fx-trail{position:fixed;inset:0;pointer-events:none;z-index:73}
+.fx-marq{position:relative;overflow:hidden;border-top:1px solid var(--line);background:linear-gradient(90deg,#160c0c,#1e0f0f,#160c0c);padding:18px 0;transform:skewY(-1.2deg);margin:10px 0}
+.fx-marq .tr{display:flex;width:max-content;animation:fxMarq 38s linear infinite}
+.fx-marq span{font:900 clamp(22px,3vw,38px) "Playfair Display",serif;letter-spacing:.06em;padding:0 26px;white-space:nowrap;color:transparent;-webkit-text-stroke:1px rgba(234,208,138,.55)}
+.fx-marq span:nth-child(3n+1){color:#E41E20;-webkit-text-stroke:0;text-shadow:0 0 24px rgba(228,30,32,.5)}
+.fx-marq span.d{color:#C9A24A;-webkit-text-stroke:0;padding:0 6px}
+.fx-marq.rev .tr{animation-direction:reverse;animation-duration:46s}
+@keyframes fxMarq{to{transform:translateX(-50%)}}
+.hero>svg.fx-eagle{position:absolute;left:-6%;top:50%;width:62%;max-width:720px;transform:translateY(-50%);z-index:0;pointer-events:none;opacity:.16;overflow:visible}
+.fx-eagle path{fill:#C9A24A;fill-opacity:0;stroke:#ead08a;stroke-width:1.2;stroke-dasharray:var(--l);stroke-dashoffset:var(--l);animation:fxEDraw 5s .6s cubic-bezier(.6,0,.2,1) forwards,fxEFill 2s 4.6s forwards,fxEGlow 4s 6s ease-in-out infinite}
+@keyframes fxEDraw{to{stroke-dashoffset:0}}
+@keyframes fxEFill{to{fill-opacity:.35}}
+@keyframes fxEGlow{50%{filter:drop-shadow(0 0 14px rgba(234,208,138,.8))}}
+.fx-big{position:absolute;right:-2%;top:30px;font:900 clamp(120px,22vw,320px)/1 "Playfair Display",serif;color:transparent;-webkit-text-stroke:1px rgba(201,162,74,.10);pointer-events:none;z-index:0;user-select:none;will-change:transform}
+.section{overflow:hidden}
+.section>.wrap{position:relative;z-index:1}
+.h2 .ch{display:inline-block;opacity:0;transform:translateY(.7em) rotate(8deg) scale(.8);filter:blur(4px)}
+.h2.in .ch{animation:fxCh .8s cubic-bezier(.2,.8,.2,1) forwards;animation-delay:calc(var(--i)*28ms)}
+@keyframes fxCh{to{opacity:1;transform:none;filter:none}}
+.fx-route{fill:none;stroke:#E41E20;stroke-width:2.2;stroke-linecap:round;stroke-dasharray:6 10;opacity:0;filter:drop-shadow(0 0 6px rgba(228,30,32,.9))}
+.mapbox.in .fx-route{opacity:.9;transition:opacity 1s 2.8s;animation:fxDash 1.2s linear infinite}
+@keyframes fxDash{to{stroke-dashoffset:-32}}
+.fx-dot{fill:#ffd27a;opacity:0;filter:drop-shadow(0 0 8px #ffb13c)}
+.mapbox.in .fx-dot{opacity:1;transition:opacity .6s 3s}
+.ans{isolation:isolate}
+.ans:before{content:"";position:absolute;inset:0;border-radius:inherit;padding:1.5px;z-index:-1;background:conic-gradient(from var(--a,0deg),transparent 0 60%,#E41E20 75%,#ead08a 85%,transparent 95%);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;opacity:0;transition:opacity .3s}
+.ans:hover:not([disabled]):before{opacity:1;animation:fxSpinA 1.6s linear infinite}
+@property --a{syntax:'<angle>';inherits:false;initial-value:0deg}
+@keyframes fxSpinA{to{--a:360deg}}
+.qtext .qc{display:inline-block;opacity:0;transform:translateY(14px) scale(.6);animation:fxQc .5s cubic-bezier(.2,.8,.2,1) forwards;animation-delay:calc(var(--i)*14ms)}
+.qtext .qw{display:inline-block;white-space:nowrap}
+@keyframes fxQc{to{opacity:1;transform:none}}
+.fx-combo{position:fixed;left:50%;top:38%;z-index:95;pointer-events:none;font:900 clamp(46px,9vw,120px)/1 "Playfair Display",serif;color:#fff;white-space:nowrap;text-shadow:0 0 30px rgba(228,30,32,.9),0 0 80px rgba(234,208,138,.6);animation:fxCombo 1.6s cubic-bezier(.2,.8,.2,1) forwards}
+.fx-combo small{display:block;text-align:center;font:800 16px Inter,sans-serif;letter-spacing:.4em;color:#ead08a;margin-top:10px;text-shadow:none}
+@keyframes fxCombo{0%{opacity:0;transform:translate(-50%,-50%) scale(3) rotate(-8deg);filter:blur(10px)}18%{opacity:1;transform:translate(-50%,-50%) scale(1) rotate(-4deg);filter:none}70%{opacity:1;transform:translate(-50%,-50%) scale(1.05) rotate(-4deg)}100%{opacity:0;transform:translate(-50%,-80%) scale(.9) rotate(-4deg)}}
+.fx-slam{position:fixed;inset:0;z-index:95;pointer-events:none;display:grid;place-items:center;font:900 min(22vw,200px)/1 "Playfair Display",serif;color:#fff;text-shadow:0 0 60px #E41E20;animation:fxSlam .9s cubic-bezier(.2,.8,.2,1) forwards}
+@keyframes fxSlam{0%{opacity:0;transform:scale(4)}25%{opacity:1;transform:scale(1)}70%{opacity:1;transform:scale(1.04)}100%{opacity:0;transform:scale(.6)}}
+body.fx-beat:after{content:"";position:fixed;inset:0;z-index:72;pointer-events:none;box-shadow:inset 0 0 140px 30px rgba(228,30,32,.55);animation:fxBeat .9s ease-in-out infinite;opacity:1;background:none}
+@keyframes fxBeat{0%,100%{opacity:.2}15%{opacity:1}30%{opacity:.35}45%{opacity:.85}}
+.btn.red:after{content:"";position:absolute;top:0;left:-60%;width:40%;height:100%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.45),transparent);transform:skewX(-20deg);animation:fxBtnShine 3.2s ease-in-out infinite;pointer-events:none}
+@keyframes fxBtnShine{0%,60%{left:-60%}100%{left:130%}}
+.brand .eagle{animation:fxLogo 3s ease-in-out infinite}
+@keyframes fxLogo{50%{filter:drop-shadow(0 0 16px rgba(228,30,32,.9));transform:scale(1.08)}}
+.res h2 .rc{display:inline-block;animation:fxWave 1.4s ease-in-out infinite;animation-delay:calc(var(--i)*70ms)}
+@keyframes fxWave{0%,100%{transform:translateY(0)}30%{transform:translateY(-14px);color:#ead08a}}
+.pod{transform-origin:50% 100%}
+.pod.p1:after{content:"";position:absolute;left:50%;top:-40%;width:160%;height:160%;transform:translateX(-50%);background:conic-gradient(from 160deg at 50% 0,transparent 0 10deg,rgba(255,230,160,.18) 20deg,transparent 30deg 330deg,rgba(255,230,160,.18) 340deg,transparent 350deg);pointer-events:none;animation:fxSpot 3s ease-in-out infinite alternate}
+@keyframes fxSpot{from{transform:translateX(-50%) rotate(-12deg)}to{transform:translateX(-50%) rotate(12deg)}}
+.titem.on b{animation:fxYear .6s cubic-bezier(.2,.8,.2,1)}
+@keyframes fxYear{0%{transform:scale(1.6);filter:blur(4px)}100%{transform:none;filter:none}}
+@media (prefers-reduced-motion:reduce){.fx-trail,.fx-eagle,.fx-marq .tr{display:none!important;animation:none!important}.h2 .ch,.qtext .qc{opacity:1!important;transform:none!important;filter:none!important;animation:none!important}}
+</style>
+<script>
+(function(){
+const RM=matchMedia('(prefers-reduced-motion: reduce)').matches;if(RM)return;
+const q=(s,r=document)=>r.querySelector(s),qa=(s,r=document)=>[...r.querySelectorAll(s)];
+const el=(t,c,p)=>{const e=document.createElement(t);if(c)e.className=c;(p||document.body).appendChild(e);return e;};
+
+/* scroll progress */
+const pr=el('div','fx-prog');
+addEventListener('scroll',()=>{const h=document.documentElement;pr.style.transform=`scaleX(${h.scrollTop/Math.max(1,h.scrollHeight-h.clientHeight)})`;},{passive:true});
+
+/* gold cursor trail */
+if(matchMedia('(hover:hover)').matches){const c=el('canvas','fx-trail'),g=c.getContext('2d');let P=[],on=false,lx=0,ly=0;
+  const rs=()=>{c.width=innerWidth;c.height=innerHeight;};rs();addEventListener('resize',rs);
+  addEventListener('pointermove',e=>{const d=Math.hypot(e.clientX-lx,e.clientY-ly);if(d<6)return;lx=e.clientX;ly=e.clientY;
+    for(let i=0;i<2;i++)P.push({x:lx,y:ly,vx:(Math.random()-.5)*1.2,vy:(Math.random()-.5)*1.2-.4,l:1,r:1+Math.random()*2.2,h:Math.random()<.5?'255,210,120':'255,90,60'});
+    if(!on){on=true;requestAnimationFrame(f);}},{passive:true});
+  function f(){g.clearRect(0,0,c.width,c.height);g.globalCompositeOperation='lighter';P=P.filter(p=>(p.l-=.035)>0);
+    for(const p of P){p.x+=p.vx;p.y+=p.vy;g.fillStyle=`rgba(${p.h},${p.l})`;g.beginPath();g.arc(p.x,p.y,p.r*p.l+.2,0,7);g.fill();}
+    if(P.length)requestAnimationFrame(f);else{on=false;g.clearRect(0,0,c.width,c.height);}}}
+
+/* marquee strips */
+const words=['PAVARËSIA','1912','ÇLIRIMI','1944','LAVDI DËSHMORËVE','VLORË','28 NËNTOR','29 NËNTOR','SHQIPËRIA'];
+function marq(rev){const m=document.createElement('div');m.className='fx-marq'+(rev?' rev':'');
+  const seq=words.map(w=>`<span>${w}</span><span class="d">✦</span>`).join('');m.innerHTML=`<div class="tr">${seq}${seq}</div>`;return m;}
+const homeWrap=q('#home > .wrap'),secs=qa('#home > .section');
+if(homeWrap)homeWrap.after(marq(false));
+if(secs[1])secs[1].before(marq(true));
+
+/* big outline years with parallax */
+const bigs=[];[['1912',secs[0]],['1944',secs[1]]].forEach(([t,s])=>{if(!s)return;const b=el('div','fx-big',s);b.textContent=t;bigs.push(b);});
+addEventListener('scroll',()=>{bigs.forEach(b=>{const r=b.parentElement.getBoundingClientRect();b.style.transform=`translateX(${(r.top)*.25}px)`;});},{passive:true});
+
+/* eagle that draws itself behind the hero */
+(function(){const hero=q('.hero');if(!hero)return;let d=null;
+  const p1=q('#e1')||(q('#flagsvg')&&q('#flagsvg').content.querySelector('path'));if(p1)d=p1.getAttribute('d');if(!d)return;
+  const ns='http://www.w3.org/2000/svg',s=document.createElementNS(ns,'svg');s.setAttribute('viewBox','150 60 340 380');s.setAttribute('class','fx-eagle');
+  [null,'matrix(-1 0 0 1 640 0)'].forEach(t=>{const p=document.createElementNS(ns,'path');p.setAttribute('d',d);if(t)p.setAttribute('transform',t);s.appendChild(p);});
+  hero.prepend(s);qa('path',s).forEach(p=>p.style.setProperty('--l',Math.ceil(p.getTotalLength())));})();
+
+/* headings: per-letter reveal */
+qa('#home .section .h2').forEach(h=>{const t=h.textContent;h.textContent='';let i=0;
+  t.split(/(\s+)/).forEach(w=>{if(/^\s+$/.test(w)){h.append(w);return;}const ws=document.createElement('span');ws.style.whiteSpace='nowrap';
+    [...w].forEach(ch=>{const s=document.createElement('span');s.className='ch';s.style.setProperty('--i',i++);s.textContent=ch;ws.append(s);});h.append(ws);});});
+
+/* scramble effect on eyebrows */
+const GL='ABCDEFGHIJKLMNOPQRSTUVWXYZËÇ0123456789#*+';
+function scramble(n){const fin=n.textContent;let fr=0;const tot=26;n.dataset.s='1';
+  (function s(){fr++;n.textContent=[...fin].map((c,i)=>c===' '||c==='·'?c:(i<fin.length*fr/tot?c:GL[Math.random()*GL.length|0])).join('');if(fr<tot)requestAnimationFrame(s);else n.textContent=fin;})();}
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting&&!e.target.dataset.s){setTimeout(()=>scramble(e.target),250);io.unobserve(e.target);}}),{threshold:.6});
+qa('.eyebrow').forEach(e=>io.observe(e));
+
+/* map: chronological route with travelling dot */
+(function(){const svg=q('#map'),mkr=q('#markers');if(!svg||typeof MAP_PTS==='undefined')return;
+  const order=['prizren','manastir','vlore','durres','lushnje','tirane','shkoder'].filter(k=>MAP_PTS[k]);if(order.length<2)return;
+  const pts=order.map(k=>MAP_PTS[k]);let d=`M${pts[0][0]},${pts[0][1]}`;
+  for(let i=1;i<pts.length;i++){const [x0,y0]=pts[i-1],[x1,y1]=pts[i],mx=(x0+x1)/2,my=(y0+y1)/2-30;d+=` Q${mx},${my} ${x1},${y1}`;}
+  const ns='http://www.w3.org/2000/svg',p=document.createElementNS(ns,'path');p.setAttribute('d',d);p.setAttribute('class','fx-route');p.id='fxRoute';
+  const c=document.createElementNS(ns,'circle');c.setAttribute('r','5');c.setAttribute('class','fx-dot');
+  const am=document.createElementNS(ns,'animateMotion');am.setAttribute('dur','9s');am.setAttribute('repeatCount','indefinite');am.setAttribute('rotate','auto');
+  const mp=document.createElementNS(ns,'mpath');mp.setAttribute('href','#fxRoute');am.appendChild(mp);c.appendChild(am);
+  svg.insertBefore(p,mkr);svg.insertBefore(c,mkr);})();
+
+/* ---------- game hooks ---------- */
+if(typeof drawQuestion==='function'){const _dq=drawQuestion;drawQuestion=function(){const r=_dq.apply(this,arguments);const qt=q('#qtext');
+  if(qt){const t=qt.textContent;qt.textContent='';let i=0;t.split(/(\s+)/).forEach(w=>{if(/^\s+$/.test(w)){qt.append(' ');return;}const ws=document.createElement('span');ws.className='qw';
+    [...w].forEach(ch=>{const s=document.createElement('span');s.className='qc';s.style.setProperty('--i',i++);s.textContent=ch;ws.append(s);});qt.append(ws);});}
+  return r;};}
+let combo=0;
+function comboBanner(n){const b=el('div','fx-combo');b.innerHTML=`KOMBO ×${n}!<small>${n>=5?'E PANDALSHME':n>=4?'FANTASTIKE':'SHUMË MIRË'}</small>`;setTimeout(()=>b.remove(),1650);
+  if(window.fxBurst){for(let k=0;k<3;k++)setTimeout(()=>fxBurst(innerWidth*(.3+Math.random()*.4),innerHeight*.38,null,60,10,.08,true),k*160);}}
+if(typeof markAnswers==='function'){const _ma=markAnswers;markAnswers=function(correct,picked){const r=_ma.apply(this,arguments);
+  if(picked===correct){combo++;if(combo>=3)setTimeout(()=>comboBanner(combo),250);}else combo=0;return r;};}
+['startSolo','startLocal','hostStart'].forEach(fn=>{if(typeof window[fn]==='function'){const o=window[fn];window[fn]=function(){combo=0;return o.apply(this,arguments);};}});
+/* countdown: FILLO! slam */
+const cd=q('#cd');if(cd){let was=false;new MutationObserver(()=>{const now=!cd.hidden;if(was&&!now&&q('#quiz').classList.contains('active')){const s=el('div','fx-slam');s.textContent='FILLO!';setTimeout(()=>s.remove(),950);}was=now;}).observe(cd,{attributes:true,attributeFilter:['hidden']});}
+/* heartbeat when time runs low */
+const tm=q('#timer');if(tm)new MutationObserver(()=>{document.body.classList.toggle('fx-beat',tm.classList.contains('low')&&!tm.hidden);}).observe(tm,{attributes:true,attributeFilter:['class','hidden']});
+/* results: waving title + counting numbers */
+if(typeof finish==='function'){const _fi=finish;finish=function(){document.body.classList.remove('fx-beat');const r=_fi.apply(this,arguments);
+  const h=q('#resBox h2');if(h){const t=h.textContent;h.textContent='';[...t].forEach((ch,i)=>{const s=document.createElement('span');s.className='rc';s.style.setProperty('--i',i);s.textContent=ch===' '?' ':ch;h.append(s);});}
+  qa('#resBox .pod b,#resBox .lbr b,#resBox .kpi b').forEach((b,k)=>{const to=parseInt(b.textContent,10);if(isNaN(to))return;b.textContent='0';const t0=performance.now()+300+k*80,dur=1300;
+    (function f(now){const p=Math.min(1,Math.max(0,(now-t0)/dur));b.textContent=Math.round(to*(1-Math.pow(1-p,4)));if(p<1)requestAnimationFrame(f);})(performance.now());});
+  return r;};}
+})();
+</script>
+<!-- ===== /FX2 LAYER ===== -->
