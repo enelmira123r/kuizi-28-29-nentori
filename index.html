@@ -1192,7 +1192,7 @@ addEventListener('scroll',()=>{const h=document.documentElement;pr.style.transfo
 if(matchMedia('(hover:hover)').matches){const c=el('canvas','fx-trail'),g=c.getContext('2d');let P=[],on=false,lx=0,ly=0;
   const rs=()=>{c.width=innerWidth;c.height=innerHeight;};rs();addEventListener('resize',rs);
   addEventListener('pointermove',e=>{const d=Math.hypot(e.clientX-lx,e.clientY-ly);if(d<6)return;lx=e.clientX;ly=e.clientY;
-    for(let i=0;i<2;i++)P.push({x:lx,y:ly,vx:(Math.random()-.5)*1.2,vy:(Math.random()-.5)*1.2-.4,l:1,r:1+Math.random()*2.2,h:Math.random()<.5?'255,210,120':'255,90,60'});
+    {const B=window.__x8big;for(let i=0;i<(B?3:2);i++)P.push({x:lx,y:ly,vx:(Math.random()-.5)*(B?1.8:1.2),vy:(Math.random()-.5)*1.2-.4,l:1,r:B?3+Math.random()*3.5:1+Math.random()*2.2,h:B?'255,45,40':(Math.random()<.5?'255,210,120':'255,90,60')});}
     if(!on){on=true;requestAnimationFrame(f);}},{passive:true});
   function f(){g.clearRect(0,0,c.width,c.height);g.globalCompositeOperation='lighter';P=P.filter(p=>(p.l-=.035)>0);
     for(const p of P){p.x+=p.vx;p.y+=p.vy;g.fillStyle=`rgba(${p.h},${p.l})`;g.beginPath();g.arc(p.x,p.y,p.r*p.l+.2,0,7);g.fill();}
@@ -1822,34 +1822,17 @@ renderLobby=function(){
 })();
 </script>
 
-<!-- ===== fx7: fjalë feste lëvizëse nën pyetje ===== -->
-<style>
-.x7{display:flex;flex-wrap:wrap;justify-content:center;gap:0 .55em;margin:22px 0 4px;font-family:"Playfair Display",serif;font-weight:700;font-size:16px;letter-spacing:.2em;user-select:none;pointer-events:none}
-.x7 .w{display:inline-flex}
-.x7 i{font-style:normal;display:inline-block;color:#cfe4fa;opacity:.42;animation:x7f 4.2s ease-in-out infinite;animation-delay:calc(var(--k) * -.23s)}
-.x7 i.k{color:#7fb0ea;opacity:.62}
-@keyframes x7f{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
-@media (prefers-reduced-motion:reduce){.x7 i{animation:none}}
-</style>
+<!-- ===== fx8: gjurma e mausit bëhet me topa të kuq mbi përgjigjen e saktë ===== -->
 <script>
 (function(){
 if(typeof drawQuestion!=='function')return;
-const PH={
- 0:['GËZUAR 28 NËNTORIN','DITA E FLAMURIT','RROFTË SHQIPËRIA','PAVARËSIA NË VLORË'],
- 1:['BASHKË PËR SHQIPËRINË','KOMBI SHQIPTAR','BESA SHQIPTARE','BASHKIMI KOMBËTAR'],
- 2:['NGA ÇDO CEP I ATDHEUT','GËZUAR NGA ÇDO CEP','FESTË NË ÇDO CEP'],
- 3:['LAVDI DËSHMORËVE','29 NËNTORI DITA E LIRISË','DITA E PAVARËSISË']};
-const LET='ABCD';
 const ORIG=drawQuestion;
 drawQuestion=function(q,b){
-  ORIG(q,b);
-  try{
-    let el=document.getElementById('x7');
-    if(!el){el=document.createElement('div');el.id='x7';el.className='x7';el.setAttribute('aria-hidden','true');}
-    const ans=$('answers');ans.after(el);
-    const a=q&&isFinite(q.a)?q.a:-1;if(a<0||a>3){el.innerHTML='';return;}
-    const list=PH[a],ph=list[Math.floor(Math.random()*list.length)],T=LET[a];
-    let k=0;el.innerHTML=ph.split(' ').map(w=>'<span class="w">'+[...w].map(ch=>`<i class="${ch===T?'k':''}" style="--k:${k++}">${ch}</i>`).join('')+'</span>').join('');
+  window.__x8big=false;ORIG(q,b);
+  try{const a=q&&isFinite(q.a)?q.a:-1;const cb=[...$('answers').querySelectorAll('.ans')][a];if(!cb)return;
+    cb.addEventListener('mouseenter',()=>{if(!cb.disabled)window.__x8big=true;});
+    cb.addEventListener('mouseleave',()=>{window.__x8big=false;});
+    cb.addEventListener('click',()=>{window.__x8big=false;});
   }catch(e){}
 };
 })();
