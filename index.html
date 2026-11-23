@@ -99,7 +99,7 @@ h1 em{font-style:italic;font-weight:700;background:linear-gradient(90deg,#ff3a3c
 
 /* sections */
 .section{padding:96px 0;border-top:1px solid var(--line);position:relative}
-.modes3{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;margin-top:40px}
+.modes3{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:40px}
 .mcard{position:relative;text-align:left;padding:30px;border-radius:24px;border:1px solid var(--line);background:linear-gradient(180deg,rgba(255,255,255,.035),rgba(255,255,255,.01));overflow:hidden;transition:transform .3s var(--ease),border-color .3s,box-shadow .3s;min-height:270px;display:flex;flex-direction:column}
 .mcard:hover{transform:translateY(-6px);border-color:var(--gold);box-shadow:0 28px 60px rgba(0,0,0,.45)}
 .mcard.hl{background:linear-gradient(160deg,#e4262a,#8f1015);border-color:transparent;box-shadow:0 24px 60px rgba(228,30,32,.28)}
@@ -352,13 +352,13 @@ footer b{font-family:"Playfair Display",serif;color:var(--cream);font-size:16px}
       <div>
         <span class="eyebrow">28 Nëntor 1912 · 29 Nëntor 1944</span>
         <h1>Pavarësia dhe <em>Çlirimi</em> i Shqipërisë</h1>
-        <p class="lead">Një kuiz për ngjarjet që formuan shtetin shqiptar — nga Lidhja e Prizrenit te flamuri në Vlorë dhe Çlirimi i vendit. Luaj vetë ose me grupe.</p>
+        <p class="lead">Një kuiz për ngjarjet që formuan shtetin shqiptar — nga Lidhja e Prizrenit te flamuri në Vlorë dhe Çlirimi i vendit. Luaj vetë, me grupe, ose live në disa laptopë.</p>
         <div class="ctas">
-          <button class="btn red big" onclick="openSetup('local')">Fillo lojën <span>→</span></button>
-          <button class="btn ghost big" onclick="openSetup('solo')">Luaj vetë</button>
+          <button class="btn red big" onclick="openSetup('mp')">Fillo lojën <span>→</span></button>
+          <button class="btn ghost big" onclick="openJoin()">Hyr me kod</button>
         </div>
         <div class="feats">
-          <div class="feat"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8" cy="9" r="3"/><circle cx="16" cy="9" r="3"/></svg></i>Gara me 2–6 grupe</div>
+          <div class="feat"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="14" height="10" rx="2"/><rect x="9" y="10" width="13" height="10" rx="2"/></svg></i>Live në disa laptopë</div>
           <div class="feat"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v5h1"/></svg></i>Shpjegim pas çdo pyetjeje</div>
           <div class="feat"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0V4z"/></svg></i>Renditje dhe fitues</div>
         </div>
@@ -379,10 +379,13 @@ footer b{font-family:"Playfair Display",serif;color:var(--cream);font-size:16px}
     <div class="h2">Si do të luani sot?</div>
     <p class="sub">Zgjidh mënyrën që i përshtatet klasës apo garës suaj.</p>
     <div class="modes3">
-      <button class="mcard hl" onclick="openSetup('local')"><span class="num">01</span>
+      <button class="mcard hl" onclick="openSetup('mp')"><span class="tag">Live</span><span class="num">01</span>
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><rect x="2" y="4" width="14" height="10" rx="2"/><rect x="9" y="10" width="13" height="10" rx="2"/></svg></div>
+        <h3>Disa laptopë</h3><p>Çdo grup përgjigjet nga laptopi i vet. Një laptop krijon lojën, të tjerët hyjnë me kod.</p><span class="go">Krijo lojë →</span></button>
+      <button class="mcard" onclick="openSetup('local')"><span class="num">02</span>
         <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="var(--gold2)" stroke-width="2"><circle cx="8" cy="9" r="3"/><circle cx="16" cy="9" r="3"/><path d="M2 20c0-3 3-5 6-5s6 2 6 5M12 20c0-3 2-5 4-5 3 0 6 2 6 5"/></svg></div>
         <h3>Një laptop, disa grupe</h3><p>Grupet luajnë me radhë në të njëjtin ekran — ideale për projektor në klasë.</p><span class="go">Fillo garën →</span></button>
-      <button class="mcard" onclick="openSetup('solo')"><span class="num">02</span>
+      <button class="mcard" onclick="openSetup('solo')"><span class="num">03</span>
         <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="var(--gold2)" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg></div>
         <h3>Individualisht</h3><p>Testo veten, mblidh seri përgjigjesh të sakta dhe shiko sa di.</p><span class="go">Luaj vetë →</span></button>
     </div>
@@ -419,6 +422,7 @@ footer b{font-family:"Playfair Display",serif;color:var(--cream);font-size:16px}
   <span class="eyebrow">Përgatit lojën</span>
   <div class="h2">Cilësimet e lojës</div>
   <div class="seg" id="modeSeg">
+    <button data-m="mp"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="14" height="10" rx="2"/><rect x="9" y="10" width="13" height="10" rx="2"/></svg>Disa laptopë</button>
     <button data-m="local"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8" cy="9" r="3"/><circle cx="16" cy="9" r="3"/><path d="M2 20c0-3 3-5 6-5s6 2 6 5M12 20c0-3 2-5 4-5 3 0 6 2 6 5"/></svg>Një laptop</button>
     <button data-m="solo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>Individualisht</button>
   </div>
@@ -440,6 +444,32 @@ footer b{font-family:"Playfair Display",serif;color:var(--cream);font-size:16px}
   <p class="note" id="setupNote"></p>
 </div></div></main>
 
+<!-- JOIN -->
+<main id="join" class="screen"><div class="wrap"><div class="page">
+  <div style="text-align:center"><span class="eyebrow">Hyr në lojë</span><div class="h2">Shkruaj kodin e lojës</div><p class="sub" style="margin:0 auto">Kodi me 4 shifra shfaqet në laptopin që krijoi lojën.</p></div>
+  <div class="joinbox">
+    <input class="codein" id="codeIn" inputmode="numeric" maxlength="4" placeholder="····" autocomplete="off">
+    <button class="btn red big" style="width:100%" id="joinBtn" onclick="mpJoin()">Hyr →</button>
+    <p class="note" id="joinNote"></p>
+  </div>
+</div></div></main>
+
+<!-- LOBBY -->
+<main id="lobby" class="screen"><div class="wrap"><div class="page">
+  <div class="lobbyhead">
+    <span class="conn" id="conn"><i></i><span>Duke u lidhur…</span></span>
+    <div style="margin-top:22px" class="lbl">Kodi i lojës</div>
+    <div class="codebox" id="codeBox"></div>
+    <p class="note" id="lobbyHelp" style="max-width:520px;margin:10px auto 0"></p>
+  </div>
+  <span class="lbl" style="margin-top:34px">Zgjidh grupin për këtë laptop</span>
+  <div class="slots" id="slots"></div>
+  <div style="text-align:center;margin-top:34px">
+    <button class="btn red big" id="startBtn" hidden onclick="hostStart()">Fillo lojën →</button>
+    <div class="waiting" id="waitHost" hidden><span class="dots"><i></i><i></i><i></i></span> Duke pritur që të fillojë loja</div>
+  </div>
+</div></div></main>
+
 <!-- QUIZ -->
 <main id="quiz" class="screen"><div class="wrap"><div class="quiz">
   <div class="board" id="board" hidden></div>
@@ -455,7 +485,7 @@ footer b{font-family:"Playfair Display",serif;color:var(--cream);font-size:16px}
       <div class="fb" id="fb"></div>
       <div class="actrow">
         <div class="timer" id="timer" hidden><svg width="52" height="52"><circle cx="26" cy="26" r="22" stroke="#2a1f1f" stroke-width="4" fill="none"/><circle id="tc" cx="26" cy="26" r="22" stroke="#E41E20" stroke-width="4" fill="none" stroke-linecap="round" stroke-dasharray="138.2" stroke-dashoffset="0"/></svg><b id="tt">30</b></div>
-        <span id="revealBtn" hidden></span>
+        <button class="btn ghost" id="revealBtn" hidden onclick="hostReveal()">Shfaq përgjigjen</button>
         <button class="btn red" id="next" hidden onclick="nextQ()">Vazhdo →</button>
       </div>
     </div>
@@ -475,6 +505,60 @@ footer b{font-family:"Playfair Display",serif;color:var(--cream);font-size:16px}
   <path id="al-a" fill="#000001" d="M272 93.3c-4.6 0-12.3 1.5-12.2 5-13-2.1-14.3 3.2-13.5 8q2-2.9 3.9-3.1 2.5-.3 5.4 1.4a22 22 0 0 1 4.8 4.1c-4.6 1.1-8.2.4-11.8-.2a17 17 0 0 1-5.7-2.4c-1.5-1-2-2-4.3-4.3-2.7-2.8-5.6-2-4.7 2.3 2.1 4 5.6 5.8 10 6.6 2.1.3 5.3 1 8.9 1s7.6-.5 9.8 0c-1.3.8-2.8 2.3-5.8 2.8s-7.5-1.8-10.3-2.4c.3 2.3 3.3 4.5 9.1 5.7 9.6 2 17.5 3.6 22.8 6.5a37 37 0 0 1 10.9 9.2c4.7 5.5 5 9.8 5.2 10.8 1 8.8-2.1 13.8-7.9 15.4-2.8.7-8-.7-9.8-2.9-2-2.2-3.7-6-3.2-12 .5-2.2 3.1-8.3.9-9.5a274 274 0 0 0-32.3-15.1c-2.5-1-4.5 2.4-5.3 3.8a50 50 0 0 1-36-23.7c-4.2-7.6-11.3 0-10.1 7.3 1.9 8 8 13.8 15.4 18s17 8.2 26.5 8c5.2 1 5.1 7.6-1 8.9-12.1 0-21.8-.2-30.9-9-6.9-6.3-10.7 1.2-8.8 5.4 3.4 13.1 22.1 16.8 41 12.6 7.4-1.2 3 6.6 1 6.7-8 5.7-22.1 11.2-34.6 0-5.7-4.4-9.6-.8-7.4 5.5 5.5 16.5 26.7 13 41.2 5 3.7-2.1 7.1 2.7 2.6 6.4-18.1 12.6-27.1 12.8-35.3 8-10.2-4.1-11 7.2-5 11 6.7 4 23.8 1 36.4-7 5.4-4 5.6 2.3 2.2 4.8-14.9 12.9-20.8 16.3-36.3 14.2-7.7-.6-7.6 8.9-1.6 12.6 8.3 5.1 24.5-3.3 37-13.8 5.3-2.8 6.2 1.8 3.6 7.3a54 54 0 0 1-21.8 18c-7 2.7-13.6 2.3-18.3.7-5.8-2-6.5 4-3.3 9.4 1.9 3.3 9.8 4.3 18.4 1.3s17.8-10.2 24.1-18.5c5.5-4.9 4.9 1.6 2.3 6.2-12.6 20-24.2 27.4-39.5 26.2-6.7-1.2-8.3 4-4 9 7.6 6.2 17 6 25.4-.2 7.3-7 21.4-22.4 28.8-30.6 5.2-4.1 6.9 0 5.3 8.4-1.4 4.8-4.8 10-14.3 13.6-6.5 3.7-1.6 8.8 3.2 9 2.7 0 8.1-3.2 12.3-7.8 5.4-6.2 5.8-10.3 8.8-19.9 2.8-4.6 7.9-2.4 7.9 2.4-2.5 9.6-4.5 11.3-9.5 15.2-4.7 4.5 3.3 6 6 4.1 7.8-5.2 10.6-12 13.2-18.2 2-4.4 7.4-2.3 4.8 5-6 17.4-16 24.2-33.3 27.8-1.7.3-2.8 1.3-2.2 3.3l7 7c-10.7 3.2-19.4 5-30.2 8l-14.8-9.8c-1.3-3.2-2-8.2-9.8-4.7-5.2-2.4-7.7-1.5-10.6 1 4.2 0 6 1.2 7.7 3.1 2.2 5.7 7.2 6.3 12.3 4.7 3.3 2.7 5 4.9 8.4 7.7l-16.7-.5c-6-6.3-10.6-6-14.8-1-3.3.5-4.6.5-6.8 4.4 3.4-1.4 5.6-1.8 7.1-.3 6.3 3.7 10.4 2.9 13.5 0l17.5 1.1c-2.2 2-5.2 3-7.5 4.8-9-2.6-13.8 1-15.4 8.3a17 17 0 0 0-1.2 9.3q1.1-4.6 4.9-7c8 2 11-1.3 11.5-6.1 4-3.2 9.8-3.9 13.7-7.1 4.6 1.4 6.8 2.3 11.4 3.8q2.4 7.5 11.3 5.6c7 .2 5.8 3.2 6.4 5.5 2-3.3 1.9-6.6-2.5-9.6-1.6-4.3-5.2-6.3-9.8-3.8-4.4-1.2-5.5-3-9.9-4.3 11-3.5 18.8-4.3 29.8-7.8l7.7 6.8q2.3 1.5 3.8 0c6.9-10 10-18.7 16.3-25.3 2.5-2.8 5.6-6.4 9-7.3 1.7-.5 3.8-.2 5.2 1.3 1.3 1.4 2.4 4.1 2 8.2-.7 5.7-2.1 7.6-3.7 11s-3.6 5.6-5.7 8.3c-4 5.3-9.4 8.4-12.6 10.5-6.4 4.1-9 2.3-14 2-6.4.7-8 3.8-2.8 8.1 4.8 2.6 9.2 2.9 12.8 2.2 3-.6 6.6-4.5 9.2-6.6 2.8-3.3 7.6.6 4.3 4.5-5.9 7-11.7 11.6-19 11.5-7.7 1-6.2 5.3-1.2 7.4 9.2 3.7 17.4-3.3 21.6-8 3.2-3.5 5.5-3.6 5 1.9-3.3 9.9-7.6 13.7-14.8 14.2-5.8-.6-5.9 4-1.6 7 9.6 6.6 16.6-4.8 19.9-11.6 2.3-6.2 5.9-3.3 6.3 1.8 0 6.9-3 12.4-11.3 19.4 6.3 10.1 13.7 20.4 20 30.5l19.2-214L320 139c-2-1.8-8.8-9.8-10.5-11-.7-.6-1-1-.1-1.4s3-.8 4.5-1c-4-4.1-7.6-5.4-15.3-7.6 1.9-.8 3.7-.4 9.3-.6a30 30 0 0 0-13.5-10.2c4.2-3 5-3.2 9.2-6.7a86 86 0 0 1-19.5-3.8 37 37 0 0 0-12-3.4zm.8 8.4c3.8 0 6.1 1.3 6.1 2.9s-2.3 2.9-6.1 2.9-6.2-1.5-6.2-3c0-1.6 2.4-2.8 6.2-2.8"/>
   <use xlink:href="#al-a" width="100%" height="100%" transform="matrix(-1 0 0 1 640 0)"/>
 </svg></template>
+<script>
+/* live room over PeerJS (WebRTC) for hosting outside claude.ai */
+(function(){
+if(window.claude&&window.claude.use)return;
+const SRC=['https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js','https://cdn.jsdelivr.net/npm/peerjs@1.5.4/dist/peerjs.min.js'];
+let libP=null;
+function lib(){if(window.Peer)return Promise.resolve();return libP||(libP=new Promise((res,rej)=>{let i=0;const nx=()=>{if(i>=SRC.length){libP=null;return rej(new Error('lib'));}const s=document.createElement('script');s.src=SRC[i++];s.onload=()=>res();s.onerror=()=>{s.remove();nx();};document.head.appendChild(s);};nx();}));}
+const PFX='kz2829nentori-';
+function openPeer(id){return new Promise((res,rej)=>{let p;try{p=id?new Peer(id,{debug:0}):new Peer({debug:0});}catch(e){return rej(e);}let done=false;
+  p.on('open',()=>{if(done)return;done=true;res(p);});
+  p.on('error',e=>{if(done)return;done=true;try{p.destroy();}catch(_){}rej(e);});
+  setTimeout(()=>{if(done)return;done=true;try{p.destroy();}catch(_){}rej(new Error('timeout'));},15000);});}
+async function join(name){
+  await lib();
+  const hubId=PFX+String(name).replace(/[^a-z0-9-]/gi,'');
+  let peer,isHub=false;
+  try{peer=await openPeer(hubId);isHub=true;}
+  catch(e){if(!e||e.type!=='unavailable-id')throw e;peer=await openPeer(null);}
+  const me=peer.id;let mine={},alive=true,connected=false,conn=null,tries=0;
+  const others=new Map(),conns=new Map(),ph=[],ch=[];
+  const snap=()=>[{peer:me,isMe:true,sameTab:true,presence:mine},...[...others].map(([p,pr])=>({peer:p,isMe:false,sameTab:false,presence:pr}))];
+  const fire=()=>{const s=snap();ph.forEach(h=>setTimeout(()=>{try{h.ok({peers:s});}catch(e){console.warn(e);}},0));};
+  const setConn=c=>{connected=c;ch.forEach(h=>{try{h(c);}catch(e){}});};
+  const all=()=>{const m={};m[me]=mine;others.forEach((v,k)=>{m[k]=v;});return m;};
+  const bcast=()=>{const m=all();conns.forEach(c=>{try{if(c.open)c.send({t:'all',m});}catch(_){}});};
+  peer.on('disconnected',()=>{if(alive){try{peer.reconnect();}catch(_){}}});
+  if(isHub){
+    peer.on('connection',c=>{
+      c.on('open',()=>{conns.set(c.peer,c);try{c.send({t:'all',m:all()});}catch(_){}});
+      c.on('data',d=>{if(d&&d.t==='p'&&d.pr&&typeof d.pr==='object'&&!Array.isArray(d.pr)){others.set(c.peer,d.pr);fire();bcast();}});
+      const gone=()=>{conns.delete(c.peer);if(others.delete(c.peer)){fire();bcast();}};
+      c.on('close',gone);c.on('error',gone);});
+    setTimeout(()=>setConn(true),0);
+  }else{
+    const dial=()=>{if(!alive)return;conn=peer.connect(hubId,{reliable:true});let opened=false;
+      conn.on('open',()=>{opened=true;tries=0;setConn(true);try{conn.send({t:'p',pr:mine});}catch(_){}});
+      conn.on('data',d=>{if(d&&d.t==='all'&&d.m&&typeof d.m==='object'){others.clear();for(const k in d.m)if(k!==me)others.set(k,d.m[k]);fire();}});
+      const drop=()=>{if(!alive)return;if(connected)setConn(false);others.clear();fire();
+        if(opened)ph.forEach(h=>{try{h.err&&h.err();}catch(_){}});
+        if(tries++<20)setTimeout(dial,2500);};
+      conn.on('close',drop);conn.on('error',drop);};
+    dial();
+  }
+  return {name,
+    presence:async patch=>{mine=JSON.parse(JSON.stringify(Object.assign({},mine,patch)));Object.keys(mine).forEach(k=>{if(mine[k]===null)delete mine[k];});
+      if(isHub)bcast();else if(conn&&conn.open){try{conn.send({t:'p',pr:mine});}catch(_){}}fire();},
+    onPeers:(ok,err)=>{const h={ok,err};ph.push(h);setTimeout(()=>{try{ok({peers:snap()});}catch(_){}},0);return()=>{const i=ph.indexOf(h);if(i>=0)ph.splice(i,1);};},
+    onConnection:h=>{ch.push(h);setTimeout(()=>h(connected),0);return()=>{const i=ch.indexOf(h);if(i>=0)ch.splice(i,1);};},
+    peers:snap,connected:()=>connected,
+    leave:async()=>{alive=false;try{conns.forEach(c=>c.close());}catch(_){}try{conn&&conn.close();}catch(_){}try{peer.destroy();}catch(_){}}};
+}
+window.claude={use:async n=>n==='room'?{join}:null};
+})();
+</script>
 <script>
 /* ================= DATA ================= */
 const GROUPS = [[{"q": "Në cilin qytet u shpall Pavarësia e Shqipërisë?", "o": ["Tiranë", "Vlorë", "Shkodër", "Korçë"], "a": 1, "e": "Pavarësia u shpall në Vlorë, në Kuvendin Kombëtar ku morën pjesë delegatë nga të gjitha trevat shqiptare."}, {"q": "Në cilin vit u shpall Pavarësia e Shqipërisë?", "o": ["1910", "1912", "1944", "1920"], "a": 1, "e": "Shpallja ndodhi gjatë Luftës së Parë Ballkanike, kur Perandoria Osmane po humbiste territoret e saj në Ballkan."}, {"q": "Kush ngriti flamurin në Vlorë më 28 Nëntor 1912?", "o": ["Skënderbeu", "Ahmet Zogu", "Ismail Qemali", "Fan Noli"], "a": 2, "e": "Ismail Qemali ngriti flamurin kuq e zi në Vlorë, para popullit të mbledhur, më 28 Nëntor 1912."}, {"q": "Si quhet himni kombëtar shqiptar?", "o": ["Himni i Flamurit", "Shqiponja", "Kënga e Lirisë", "Himni i Pavarësisë"], "a": 0, "e": "Teksti i “Himnit të Flamurit” është shkruar nga Asdreni (Aleksandër Stavre Drenova), ndërsa muzika është e Ciprian Porumbescut."}, {"q": "Si quhej dokumenti që shpalli Pavarësinë?", "o": ["Kushtetuta e parë", "Akti i Shpalljes së Pavarësisë", "Traktati i Vlorës", "Dekreti i Mbretërisë"], "a": 1, "e": "Akti i Shpalljes së Pavarësisë u nënshkrua nga delegatët e Kuvendit të Vlorës."}, {"q": "Në cilën datë përkujtohet Çlirimi i Shqipërisë?", "o": ["28 Nëntor", "29 Nëntor", "30 Nëntor", "1 Dhjetor"], "a": 1, "e": "Më 29 Nëntor 1944 u çlirua Shkodra, qyteti i fundit, prandaj kjo datë përkujtohet si Dita e Çlirimit."}, {"q": "Në cilin vit u krijua Lidhja Shqiptare e Prizrenit?", "o": ["1878", "1912", "1920", "1944"], "a": 0, "e": "Lidhja Shqiptare e Prizrenit u themelua më 10 qershor 1878."}, {"q": "Cili ishte qëllimi kryesor i Lidhjes së Prizrenit?", "o": ["Krijimi i një mbretërie", "Mbrojtja e trojeve shqiptare", "Zhvillimi i tregtisë", "Krijimi i një ushtrie detare"], "a": 1, "e": "Lidhja kundërshtoi vendimet e Traktatit të Shën Stefanit dhe të Kongresit të Berlinit, që u jepnin troje shqiptare shteteve fqinje."}, {"q": "Kush ishte kryetari i Qeverisë së Përkohshme të Vlorës?", "o": ["Luigj Gurakuqi", "Ismail Qemali", "Isa Boletini", "Hasan Prishtina"], "a": 1, "e": "Qeveria e Përkohshme u krijua më 4 dhjetor 1912, me Ismail Qemalin kryetar."}, {"q": "Në cilin vit u zhvillua Kongresi i Lushnjës?", "o": ["1912", "1918", "1920", "1924"], "a": 2, "e": "Kongresi i Lushnjës u mbajt në janar të vitit 1920."}, {"q": "Kush ishte Dom Nikollë Kaçorri?", "o": ["Një diplomat i huaj", "Nënkryetar i Qeverisë së Përkohshme", "Mbret i Shqipërisë", "Komandant i ushtrisë"], "a": 1, "e": "Dom Nikollë Kaçorri, klerik katolik nga Durrësi, u zgjodh nënkryetar i Qeverisë së Përkohshme të Vlorës."}, {"q": "Në cilën datë u nënshkrua Akti i Pavarësisë?", "o": ["27 Nëntor 1912", "28 Nëntor 1912", "29 Nëntor 1912", "30 Nëntor 1912"], "a": 1, "e": "Akti i Pavarësisë u nënshkrua po atë ditë, më 28 Nëntor 1912, në Vlorë."}, {"q": "Cili ishte organi që drejtoi Shqipërinë pas shpalljes së Pavarësisë?", "o": ["Qeveria e Përkohshme e Vlorës", "Parlamenti Mbretëror", "Këshilli Komunist", "Lidhja e Prizrenit"], "a": 0, "e": "Qeveria e Përkohshme e Vlorës drejtoi vendin nga dhjetori i vitit 1912 deri në fillim të vitit 1914."}, {"q": "Cila konferencë ndërkombëtare mori vendime për kufijtë e Shqipërisë pas Pavarësisë?", "o": ["Konferenca e Jaltës", "Konferenca e Londrës", "Konferenca e Parisit 1946", "Konferenca e Berlinit"], "a": 1, "e": "Konferenca e Ambasadorëve në Londër (1912–1913) njohu shtetin shqiptar dhe caktoi kufijtë e tij, duke lënë jashtë shumë troje shqiptare."}, {"q": "Cili ishte roli i Austro-Hungarisë në procesin e Pavarësisë shqiptare?", "o": ["Kundërshtoi çdo formë autonomie", "Mbështeti krijimin e një shteti shqiptar", "Pushtoi Vlorën", "Drejtoi qeverinë shqiptare"], "a": 1, "e": "Austro-Hungaria, bashkë me Italinë, mbështeti krijimin e shtetit shqiptar, edhe për të penguar daljen e Serbisë në detin Adriatik."}, {"q": "Cila ishte rëndësia e Kongresit të Lushnjës për shtetin shqiptar?", "o": ["Shpalli Pavarësinë", "Riorganizoi institucionet shtetërore dhe forcoi pavarësinë politike", "Krijoi Lidhjen e Prizrenit", "Shpalli luftën kundër Italisë"], "a": 1, "e": "Kongresi i Lushnjës kundërshtoi planet për copëtimin e Shqipërisë, krijoi qeverinë e re dhe zgjodhi Tiranën si kryeqytet të përkohshëm."}], [{"q": "Kush ishte Ismail Qemali?", "o": ["Mbret i Shqipërisë", "Udhëheqësi i shpalljes së Pavarësisë", "President i Shqipërisë", "Komandant italian"], "a": 1, "e": "Ismail Qemali (1844–1919), diplomat dhe politikan nga Vlora, udhëhoqi Kuvendin që shpalli Pavarësinë."}, {"q": "Cilat janë ngjyrat e flamurit shqiptar?", "o": ["Blu dhe e bardhë", "Kuqe dhe e zezë", "Kuqe dhe blu", "Jeshile dhe e bardhë"], "a": 1, "e": "Flamuri kuq e zi me shqiponjën dykrenare lidhet me flamurin e Gjergj Kastriotit Skënderbeut."}, {"q": "Çfarë përkujtojmë më 28 Nëntor?", "o": ["Çlirimin e Shqipërisë", "Shpalljen e Pavarësisë", "Kongresin e Manastirit", "Fillimin e Luftës së Parë Botërore"], "a": 1, "e": "28 Nëntori është Dita e Pavarësisë dhe e Flamurit."}, {"q": "Në cilin qytet u mbajt Kongresi i Manastirit?", "o": ["Vlorë", "Tiranë", "Manastir", "Shkodër"], "a": 2, "e": "Qyteti i Manastirit sot quhet Bitola dhe ndodhet në Maqedoninë e Veriut."}, {"q": "Në cilin vit u mbajt Kongresi i Manastirit?", "o": ["1878", "1908", "1912", "1920"], "a": 1, "e": "Kongresi i Manastirit u mbajt nga 14 deri më 22 nëntor 1908."}, {"q": "Çfarë alfabeti u vendos në Kongresin e Manastirit?", "o": ["Alfabeti grek", "Alfabeti arab", "Alfabeti latin", "Alfabeti cirilik"], "a": 2, "e": "U vendos alfabeti latin me 36 shkronja, të cilin e përdorim edhe sot."}, {"q": "Kush ishte Isa Boletini?", "o": ["Një patriot dhe luftëtar shqiptar", "Një mbret", "Një poet francez", "Një diplomat italian"], "a": 0, "e": "Isa Boletini, luftëtar nga Kosova, mori pjesë në kryengritjet kundër osmanëve dhe ishte në Vlorë pranë Ismail Qemalit më 1912."}, {"q": "Çfarë ishte Rilindja Kombëtare Shqiptare?", "o": ["Një periudhë e zhvillimit të ndërgjegjes kombëtare shqiptare", "Një luftë botërore", "Një organizatë ushtarake italiane", "Një marrëveshje tregtare"], "a": 0, "e": "Rilindja Kombëtare ishte lëvizja kulturore dhe politike e shek. XIX për gjuhën, shkollën shqipe dhe çlirimin kombëtar."}, {"q": "Cili ishte roli i Luigj Gurakuqit në historinë shqiptare?", "o": ["Mbret i Shqipërisë", "Patriot, intelektual dhe veprimtar i Pavarësisë", "Gjeneral italian", "President i parë"], "a": 1, "e": "Luigj Gurakuqi, nga Shkodra, ishte delegat në Kuvendin e Vlorës dhe Ministër i Arsimit në Qeverinë e Përkohshme."}, {"q": "Pse ishte i rëndësishëm Kongresi i Manastirit?", "o": ["Vendosi alfabetin e përbashkët të shqipes", "Shpalli Pavarësinë", "Krijoi ushtrinë shqiptare", "Ndau kufijtë e Shqipërisë"], "a": 0, "e": "Kongresi i Manastirit i dha fund përdorimit të shumë alfabeteve të ndryshme dhe bashkoi shkrimin e shqipes."}, {"q": "Cili ishte roli i Hasan Prishtinës në çështjen kombëtare?", "o": ["Luftoi për të drejtat dhe autonominë kombëtare shqiptare", "Ishte mbret i Shqipërisë", "Drejtoi ushtrinë italiane", "Nënshkroi pavarësinë e Kosovës"], "a": 0, "e": "Hasan Prishtina, politikan nga Kosova dhe deputet në parlamentin osman, ishte një nga udhëheqësit e kryengritjes së vitit 1912."}, {"q": "Cilat ishin pasojat e vendimeve të Kongresit të Berlinit për shqiptarët?", "o": ["Të gjitha trojet shqiptare u bashkuan", "Disa troje shqiptare rrezikuan t’u jepeshin shteteve fqinje", "Shqipëria fitoi pavarësinë", "Shqipëria u bë mbretëri"], "a": 1, "e": "Kongresi i Berlinit (1878) u dha Malit të Zi troje shqiptare si Plava dhe Gucia; shqiptarët u kundërvunë përmes Lidhjes së Prizrenit."}, {"q": "Cili ishte qëllimi i kryengritjeve shqiptare të viteve 1910–1912?", "o": ["Zgjerimi i Perandorisë Osmane", "Kërkesa për të drejta kombëtare dhe autonomi", "Pushtimi i Italisë", "Krijimi i një perandorie"], "a": 1, "e": "Kryengritjet kërkonin shkolla në gjuhën shqipe, administratë shqiptare dhe autonomi."}, {"q": "Kush ishte princi i parë i Shqipërisë në vitin 1914?", "o": ["Ahmet Zogu", "Wilhelm zu Wied", "Ismail Qemali", "Fan Noli"], "a": 1, "e": "Princ Vidi (Wilhelm zu Wied) mbërriti në Durrës në mars të vitit 1914 dhe u largua në shtator të po atij viti."}, {"q": "Çfarë ishte Komisioni Ndërkombëtar i Kontrollit në Shqipërinë e viteve 1913–1914?", "o": ["Një organ ndërkombëtar për mbikëqyrjen e administratës shqiptare", "Një ushtri shqiptare", "Një organizatë tregtare", "Një parlament shqiptar"], "a": 0, "e": "Komisioni u krijua nga Fuqitë e Mëdha në vitin 1913 për të mbikëqyrur administratën e shtetit të ri."}, {"q": "Si ndikuan Luftërat Ballkanike në të ardhmen e Shqipërisë?", "o": ["Shqipëria u bashkua me Greqinë", "Rritën rrezikun e copëtimit të trojeve shqiptare dhe përshpejtuan procesin e Pavarësisë", "Shqipëria pushtoi Serbinë", "Shqipëria u bë pjesë e Italisë"], "a": 1, "e": "Gjatë Luftërave Ballkanike, ushtritë fqinje pushtuan troje shqiptare dhe kjo e bëri urgjente shpalljen e Pavarësisë."}], [{"q": "Kush ishte Skënderbeu?", "o": ["Hero kombëtar shqiptar", "Mbret i Italisë", "President i Shqipërisë", "Diplomat francez"], "a": 0, "e": "Gjergj Kastrioti Skënderbeu (1405–1468) udhëhoqi qëndresën shqiptare kundër Perandorisë Osmane për rreth 25 vjet."}, {"q": "Çfarë përfaqëson shqiponja dykrenare në flamurin shqiptar?", "o": ["Identitetin dhe trashëgiminë kombëtare", "Detin", "Bujqësinë", "Tregtinë"], "a": 0, "e": "Shqiponja dykrenare është simboli i identitetit kombëtar dhe vjen nga flamuri i Skënderbeut."}, {"q": "Në cilin muaj festohen 28 dhe 29 Nëntori?", "o": ["Tetor", "Nëntor", "Dhjetor", "Janar"], "a": 1, "e": "28 Nëntori (Pavarësia) dhe 29 Nëntori (Çlirimi) festohen njëri pas tjetrit, në nëntor."}, {"q": "Cila është data e Çlirimit të Shqipërisë sipas përkujtimit zyrtar?", "o": ["28 Nëntor 1944", "29 Nëntor 1944", "30 Nëntor 1944", "1 Dhjetor 1944"], "a": 1, "e": "Data zyrtare e Çlirimit është 29 Nëntori 1944, kur u çlirua Shkodra."}, {"q": "Në cilin vit filloi Lufta e Dytë Botërore?", "o": ["1914", "1939", "1941", "1945"], "a": 1, "e": "Lufta e Dytë Botërore filloi më 1 shtator 1939; Shqipëria ishte pushtuar nga Italia më 7 prill të po atij viti."}, {"q": "Kush ishte Luigj Gurakuqi?", "o": ["Patriot dhe intelektual shqiptar", "Mbret i Shqipërisë", "Gjeneral gjerman", "President i Kosovës"], "a": 0, "e": "Luigj Gurakuqi (1879–1925) ishte shkrimtar, mësues dhe politikan nga Shkodra."}, {"q": "Çfarë ishte Lidhja Shqiptare e Prizrenit?", "o": ["Një organizatë politike dhe kombëtare shqiptare", "Një ushtri e huaj", "Një marrëveshje ekonomike", "Një universitet"], "a": 0, "e": "Lidhja e Prizrenit ishte organizata politike që bashkoi shqiptarët për mbrojtjen e trojeve të tyre."}, {"q": "Cili ishte qëllimi i Kongresit të Lushnjës?", "o": ["Të organizonte dhe forconte shtetin shqiptar", "Të shpallte Luftën e Dytë Botërore", "Të krijonte alfabetin", "Të shpallte Pavarësinë"], "a": 0, "e": "Pas Luftës së Parë Botërore Shqipëria rrezikonte copëtimin; Kongresi i Lushnjës forcoi shtetin dhe institucionet e tij."}, {"q": "Cilat ishin arsyet kryesore që çuan në shpalljen e Pavarësisë më 1912?", "o": ["Dëshira për zgjerimin e Perandorisë Osmane", "Dobësimi i Perandorisë Osmane dhe rritja e lëvizjes kombëtare shqiptare", "Një marrëveshje me Italinë", "Fillimi i Luftës së Dytë Botërore"], "a": 1, "e": "Dobësimi i Perandorisë Osmane dhe pjekuria e lëvizjes kombëtare pas Rilindjes çuan në shpalljen e Pavarësisë."}, {"q": "Çfarë ndikimi pati Kongresi i Berlinit në trojet shqiptare?", "o": ["Bashkoi të gjitha trojet", "Rrezikoi copëtimin e trojeve shqiptare", "Shpalli Pavarësinë", "Krijoi shtetin shqiptar"], "a": 1, "e": "Kongresi i Berlinit nuk i njohu shqiptarët si komb dhe u dha troje shqiptare shteteve fqinje."}, {"q": "Kush ishte Ahmet Zogu para se të bëhej mbret?", "o": ["Një figurë politike shqiptare dhe kryeministër", "Një poet", "Një gjeneral francez", "Një diplomat anglez"], "a": 0, "e": "Ahmet Zogu ishte ministër i Brendshëm dhe kryeministër, pastaj President (1925–1928) dhe Mbret (1928–1939)."}, {"q": "Cili ishte roli i Komisionit Ndërkombëtar të Kontrollit?", "o": ["Mbikëqyrja e organizimit të shtetit të ri shqiptar", "Drejtimi i Luftës së Dytë Botërore", "Krijimi i alfabetit shqip", "Shpallja e Pavarësisë"], "a": 0, "e": "Në Komisionin Ndërkombëtar të Kontrollit kishte përfaqësues të Fuqive të Mëdha dhe një përfaqësues shqiptar."}, {"q": "Në cilin vit u mbajt Kongresi i Lushnjës dhe cili ishte një nga vendimet e tij kryesore?", "o": ["1912 – Shpallja e Pavarësisë", "1920 – Organizimi i institucioneve shtetërore", "1939 – Bashkimi me Italinë", "1944 – Çlirimi i Shqipërisë"], "a": 1, "e": "Kongresi i Lushnjës u mbajt më 1920 dhe organizoi institucionet shtetërore; Tirana u bë kryeqytet i përkohshëm."}, {"q": "Cili ishte emri i plotë i princit që drejtoi Shqipërinë në vitin 1914?", "o": ["Wilhelm Friedrich Heinrich zu Wied", "Franz Ferdinand", "Wilhelm II", "Otto von Bismarck"], "a": 0, "e": "Wilhelm Friedrich Heinrich zu Wied njihet në historinë shqiptare si Princ Vidi."}, {"q": "Cila ishte rëndësia e Aktit të Shpalljes së Pavarësisë?", "o": ["Shënoi ndarjen e Shqipërisë nga Perandoria Osmane dhe shpalljen e shtetit të pavarur", "Shpalli krijimin e Mbretërisë", "Krijoi alfabetin shqip", "Shënoi fillimin e Luftës së Parë Botërore"], "a": 0, "e": "Akti shpalli që Shqipëria të bëhej “më vete, e lirë dhe e pavarur”, e ndarë nga Perandoria Osmane."}, {"q": "Pse 28 Nëntori 1912 konsiderohet një nga ngjarjet më të rëndësishme në historinë shqiptare?", "o": ["Sepse Shqipëria fitoi pavarësinë dhe u shpall shtet i lirë", "Sepse përfundoi Lufta e Dytë Botërore", "Sepse u krijua Lidhja e Prizrenit", "Sepse u mbajt Kongresi i Manastirit"], "a": 0, "e": "28 Nëntori 1912 shënoi lindjen e shtetit shqiptar pas rreth pesë shekujsh sundimi osman."}]];
@@ -550,7 +634,7 @@ function toggleFs(){try{if(document.fullscreenElement)document.exitFullscreen();
 })();
 
 /* ================= SETUP ================= */
-const CFG={mode:'local',n:3,len:24,timer:0,names:[]};
+const CFG={mode:'mp',n:3,len:24,timer:0,names:[]};
 function chipRow(el,vals,cur,lab,sm,on){el.innerHTML=vals.map(v=>`<button class="chip ${sm?'sm':''} ${v===cur?'on':''}" data-v="${v}">${lab(v)}</button>`).join('');
   el.onclick=e=>{const b=e.target.closest('.chip');if(!b)return;el.querySelectorAll('.chip').forEach(c=>c.classList.toggle('on',c===b));on(+b.dataset.v);play('sel');};}
 function renderSetup(){
@@ -576,9 +660,9 @@ function summary(){
 }
 $('modeSeg').onclick=e=>{const b=e.target.closest('button');if(!b)return;CFG.mode=b.dataset.m;renderSetup();play('sel');};
 function openSetup(m){ac();CFG.mode=m;renderSetup();show('setup');}
-
+function openJoin(){ac();$('joinNote').textContent='';show('join');setTimeout(()=>$('codeIn').focus(),100);}
 function goSetup(){ac();const names=Array.from({length:CFG.n},(_,i)=>cleanName(CFG.names[i],i));
-  if(CFG.mode==='solo')startSolo();else startLocal(names);}
+  if(CFG.mode==='solo')startSolo();else if(CFG.mode==='local')startLocal(names);else mpCreate(names);}
 
 /* ================= COMMON GAME UI ================= */
 let G=null,tInt=null;
@@ -674,10 +758,128 @@ function finish(){
 }
 function countUp(el,to,suf){let t0=null;const d=1400;const f=ts=>{if(!t0)t0=ts;const p=Math.min(1,(ts-t0)/d);el.textContent=Math.round(to*(1-Math.pow(1-p,3)))+(suf||'');if(p<1)requestAnimationFrame(f);};requestAnimationFrame(f);}
 
-function mpLeave(){}function mpChoose(){}function hostNext(){}function hostReveal(){}
+/* ================= MULTI-LAPTOP (live room) ================= */
+let ROOM=null,NR=null,unsubs=[];
+const roomReady=(async()=>{
+  for(let k=0;k<30&&!(window.claude&&window.claude.use);k++)await new Promise(r=>setTimeout(r,100));
+  try{if(window.claude&&window.claude.use)ROOM=await window.claude.use('room');}catch(e){ROOM=null;}
+  return ROOM;
+})();
+async function getRoom(noteEl){
+  noteEl.className='note';noteEl.textContent='Duke u lidhur…';const R=await roomReady;
+  if(!R){noteEl.className='note err';noteEl.textContent='Loja live nuk u lidh. Kontrollo internetin dhe provo përsëri.';return null;}
+  noteEl.textContent='';return R;
+}
+const isInt=(v,lo,hi)=>Number.isInteger(v)&&v>=lo&&v<=hi;
+const validSt=s=>s&&typeof s==='object'&&isInt(s.n,2,6)&&Array.isArray(s.names)&&s.names.length===s.n&&s.names.every(x=>typeof x==='string')
+  &&Array.isArray(s.list)&&s.list.length>=1&&s.list.length<=48&&s.list.every(x=>isInt(x,0,47))&&isInt(s.qi,0,s.list.length-1)
+  &&Array.isArray(s.scores)&&s.scores.length===s.n&&Array.isArray(s.picks)&&s.picks.length===s.n&&isInt(s.timer,0,60)&&isInt(s.round,1,9999)
+  &&['lobby','count','q','reveal','end'].includes(s.phase);
+
+async function mpCreate(names){
+  const R=await getRoom($('setupNote'));if(!R)return;
+  const code=String(1000+Math.floor(Math.random()*9000));
+  try{NR=await R.join('kuiz-'+code);}catch(e){$('setupNote').className='note err';$('setupNote').textContent='Loja nuk u krijua. Provo përsëri.';return;}
+  const n=names.length;
+  G={mode:'mp',host:true,code,g:0,myAns:null,peers:[],key:'',
+     st:{phase:'lobby',n,names,list:pickList(CFG.len),qi:0,scores:Array(n).fill(0),picks:Array(n).fill(null),timer:CFG.timer,round:1}};
+  lastScores=null;wireRoom();pushHost();
+}
+async function mpJoin(){
+  ac();const code=($('codeIn').value||'').replace(/\D/g,'');
+  if(code.length!==4){$('joinNote').className='note err';$('joinNote').textContent='Shkruaj kodin me 4 shifra.';return;}
+  const R=await getRoom($('joinNote'));if(!R)return;
+  try{NR=await R.join('kuiz-'+code);}catch(e){$('joinNote').className='note err';$('joinNote').textContent='Nuk u lidh. Provo përsëri.';return;}
+  G={mode:'mp',host:false,code,g:null,myAns:null,peers:[],st:null,stJson:'',key:''};lastScores=null;
+  wireRoom();NR.presence({role:'player',g:null,ans:null}).catch(()=>{});
+  renderLobby();show('lobby');
+  setTimeout(()=>{if(G&&G.mode==='mp'&&!G.host&&!G.st){mpLeave();G=null;show('join');$('joinNote').className='note err';$('joinNote').textContent='Nuk u gjet asnjë lojë me këtë kod. Kontrollo kodin.';}},9000);
+}
+function wireRoom(){
+  unsubs.push(NR.onPeers(ch=>{if(!G)return;G.peers=ch.peers;onPeers();},()=>banner('Lidhja u ndërpre.')));
+  unsubs.push(NR.onConnection(c=>{const el=$('conn');el.classList.toggle('on',c);el.lastChild.textContent=c?'I lidhur':'Duke u lidhur…';}));
+}
+function mpLeave(){unsubs.forEach(u=>{try{u()}catch(e){}});unsubs=[];if(NR){NR.leave().catch(()=>{});NR=null;}}
+function groupOf(p){return p.sameTab?G.g:(p.presence&&p.presence.g);}
+function laptopsPerGroup(){const c=Array(G.st?G.st.n:0).fill(0);G.peers.forEach(p=>{const g=groupOf(p);if(isInt(g,0,c.length-1))c[g]++;});return c;}
+function onPeers(){
+  if(G.host){hostCollect();renderLobby();return;}
+  const hosts=G.peers.filter(p=>!p.sameTab&&p.presence&&p.presence.role==='host'&&validSt(p.presence.st));
+  if(!hosts.length){if(G.st&&G.st.phase!=='end')banner('Laptopi që krijoi lojën u shkëput. Duke pritur…');return;}
+  banner('');const st=hosts[0].presence.st;const js=JSON.stringify(st);
+  if(js!==G.stJson){G.stJson=js;G.st={...st,names:st.names.map(cleanName)};onState();}else renderLobby();
+}
+function pushHost(){NR.presence({role:'host',st:G.st,g:G.g,ans:G.myAns}).catch(()=>{});onState();}
+function hostCollect(){
+  const st=G.st;if(st.phase!=='q')return;let changed=false;
+  const take=(g,a)=>{if(isInt(g,0,st.n-1)&&a&&a.r===st.round&&a.qi===st.qi&&isInt(a.c,0,3)&&st.picks[g]==null){st.picks[g]=a.c;changed=true;}};
+  if(G.myAns)take(G.g,G.myAns);
+  G.peers.forEach(p=>{if(!p.sameTab&&p.presence)take(p.presence.g,p.presence.ans);});
+  const active=new Set();G.peers.forEach(p=>{const g=groupOf(p);if(isInt(g,0,st.n-1))active.add(g);});if(isInt(G.g,0,st.n-1))active.add(G.g);
+  if(active.size&&[...active].every(g=>st.picks[g]!=null)){hostReveal();return;}
+  if(changed)pushHost();
+}
+function hostStart(){const st=G.st;st.phase='count';st.qi=0;st.picks=Array(st.n).fill(null);G.myAns=null;pushHost();
+  setTimeout(()=>{if(G&&G.host&&G.st.phase==='count'){G.st.phase='q';pushHost();hostCollect();}},2600);}
+function hostReveal(){const st=G.st;if(!G.host||st.phase!=='q')return;const a=ORDER[st.list[st.qi]].a;st.picks.forEach((p,g)=>{if(p===a)st.scores[g]++;});st.phase='reveal';pushHost();}
+function hostNext(){if(!G.host)return;const st=G.st;if(st.phase!=='reveal')return;
+  if(st.qi>=st.list.length-1)st.phase='end';else{st.qi++;st.phase='q';st.picks=Array(st.n).fill(null);}
+  G.myAns=null;pushHost();hostCollect();}
+function hostRestart(){const s=G.st;G.st={...s,phase:'lobby',list:pickList(s.list.length),qi:0,scores:Array(s.n).fill(0),picks:Array(s.n).fill(null),round:s.round+1};G.myAns=null;G.key='';lastScores=null;pushHost();}
+function setGroup(g){G.g=g;play('sel');if(G.host)pushHost();else NR.presence({g}).catch(()=>{});renderLobby();if(G.st&&G.st.phase==='q')onState(true);}
+function mpChoose(i){
+  const st=G.st;if(!st||st.phase!=='q'||G.g==null||(G.myAns&&G.myAns.qi===st.qi&&G.myAns.r===st.round))return;
+  G.myAns={r:st.round,qi:st.qi,c:i};play('sel');lockMine(i);
+  if(G.host){hostCollect();if(G.st.phase==='q')pushHost();}else NR.presence({ans:G.myAns}).catch(()=>{});
+}
+function lockMine(c){[...$('answers').children].forEach((b,j)=>{b.disabled=true;b.classList.toggle('sel',j===c);if(j!==c)b.classList.add('dim');});
+  $('fb').textContent='Përgjigjja u dërgua. Duke pritur grupet e tjera…';$('fb').className='fb';}
+function renderLobby(){
+  if(!G||G.mode!=='mp')return;
+  if($('codeBox').dataset.code!==G.code){$('codeBox').dataset.code=G.code;$('codeBox').innerHTML=G.code.split('').map(d=>`<span>${d}</span>`).join('');}
+  $('lobbyHelp').textContent=G.host?'Në laptopët e tjerë hap këtë faqe, shtyp “Hyr me kod” dhe shkruaj këtë kod. Pastaj çdo laptop zgjedh grupin e vet.':'U lidhe me lojën. Zgjidh grupin tënd më poshtë.';
+  if(!G.st){$('slots').innerHTML='<p class="note" style="text-align:center;grid-column:1/-1">Duke kërkuar lojën…</p>';$('startBtn').hidden=true;$('waitHost').hidden=false;return;}
+  const c=laptopsPerGroup();
+  $('slots').innerHTML=c.map((k,i)=>`<button class="slot ${G.g===i?'mine':''}" style="--c:${COLORS[i]}" onclick="setGroup(${i})">${G.g===i?'<span class="you">Ky laptop</span>':''}<b>${esc(G.st.names[i])}</b><small><i class="${k?'on':''}"></i>${k===0?'Asnjë laptop':k===1?'1 laptop':k+' laptopë'}</small></button>`).join('');
+  $('startBtn').hidden=!G.host;$('waitHost').hidden=G.host;
+  if(G.st.phase==='q'&&$('quiz').classList.contains('active'))renderBoard(G.st.names,G.st.scores,{me:G.g,status:G.st.picks.map(p=>p!=null?'done':'')});
+}
+function onState(force){
+  const st=G.st;if(!st)return;
+  if(st.phase==='lobby'){if(G.key!=='lobby'+st.round){G.key='lobby'+st.round;if(!G.host){G.myAns=null;NR&&NR.presence({ans:null}).catch(()=>{});}}renderLobby();show('lobby');return;}
+  if(st.phase==='end'){if(G.key!=='end'+st.round){G.key='end'+st.round;finish();}return;}
+  if(st.phase==='count'){if(G.key!=='count'+st.round){G.key='count'+st.round;lastScores=null;show('quiz');renderBoard(st.names,st.scores,{me:G.g});$('qtext').textContent='';$('answers').innerHTML='';$('badges').innerHTML='';$('fb').textContent='';$('explain').hidden=true;$('timer').hidden=true;countdown();}return;}
+  const q=ORDER[st.list[st.qi]];const k='q'+st.round+'-'+st.qi;
+  $('hint').hidden=true;$('qLeft').innerHTML='';$('qRight').innerHTML=G.host?'<span class="pill">Ju drejtoni lojën</span>':'';
+  if(G.key!==k||force){
+    G.key=k;$('cd').hidden=true;show('quiz');$('bar').style.width=(st.qi/st.list.length*100)+'%';
+    drawQuestion(q,G.g!=null?`<span class="badge fill" style="--c:${COLORS[G.g]}">Ju jeni: ${esc(st.names[G.g])}</span>`:'');
+    if(G.g==null){$('badges').innerHTML='<div class="pickg">Zgjidh grupin tënd: '+st.names.map((nm,i)=>`<button onclick="setGroup(${i})" style="border-color:${COLORS[i]}">${esc(nm)}</button>`).join('')+'</div>';[...$('answers').children].forEach(b=>b.disabled=true);}
+    if(st.phase==='q'){
+      if(G.myAns&&G.myAns.r===st.round&&G.myAns.qi===st.qi)lockMine(G.myAns.c);
+      startTimer(st.timer,()=>{if(G.host)hostReveal();else if(!(G.myAns&&G.myAns.qi===st.qi)){[...$('answers').children].forEach(b=>b.disabled=true);$('fb').textContent='Koha mbaroi.';}});
+    }
+  }
+  if(st.phase==='q'){
+    renderBoard(st.names,st.scores,{me:G.g,status:st.picks.map(p=>p!=null?'done':'')});
+    $('revealBtn').hidden=!G.host;$('next').hidden=true;
+  }else if(st.phase==='reveal'){
+    if(G.revealed!==k){G.revealed=k;
+      stopTimer();$('timer').hidden=true;
+      const mine=G.g!=null?st.picks[G.g]:null;markAnswers(q.a,mine);showExplain(q);
+      renderBoard(st.names,st.scores,{me:G.g,status:st.picks.map(p=>p==null?'no':p===q.a?'ok':'no')});
+      if(G.g!=null&&mine===q.a){$('fb').textContent='Saktë! +1 pikë për grupin tuaj.';$('fb').className='fb ok';play('ok');}
+      else if(G.g!=null){$('fb').textContent=mine==null?'Pa përgjigje.':'Gabim!';$('fb').className='fb bad';play('bad');}
+      $('revealBtn').hidden=true;
+      if(G.host){$('next').textContent=st.qi===st.list.length-1?'Shiko rezultatin →':'Vazhdo →';$('next').hidden=false;}
+      else{$('next').hidden=true;$('qRight').innerHTML='<span class="pill"><span class="dots"><i></i><i></i><i></i></span> Pyetja tjetër po vjen</span>';}
+    }
+  }
+}
+
 /* ================= KEYBOARD ================= */
 document.addEventListener('keydown',e=>{
-  if(e.target.tagName==='INPUT')return;
+  if(e.target.tagName==='INPUT'){if(e.key==='Enter'&&e.target.id==='codeIn')mpJoin();return;}
   if(!$('quiz').classList.contains('active')||!G||!$('cd').hidden)return;
   const m={A:0,B:1,C:2,D:3,'1':0,'2':1,'3':2,'4':3}[e.key.toUpperCase()];
   if(m!==undefined){const b=$('answers').children[m];if(b&&!b.disabled)choose(m);}
@@ -693,8 +895,6 @@ function confetti(){
   if(++t<240)requestAnimationFrame(f);else x.clearRect(0,0,c.width,c.height);})();
 }
 </script>
-</body>
-</html>
 <!-- ===== FX LAYER: animations ===== -->
 <style>
 .fx-aurora{position:fixed;inset:-20%;z-index:-1;pointer-events:none;filter:blur(80px);opacity:.55}
@@ -926,6 +1126,7 @@ if(typeof confetti==='function'){const _cf=confetti;confetti=function(){_cf.appl
 })();
 </script>
 <!-- ===== /FX LAYER ===== -->
+
 <!-- ===== FX2 LAYER: more animations ===== -->
 <style>
 .fx-prog{position:fixed;left:0;top:0;height:3px;width:100%;z-index:60;transform-origin:0 50%;transform:scaleX(0);background:linear-gradient(90deg,#E41E20,#ff7a3c,#C9A24A);box-shadow:0 0 12px rgba(228,30,32,.8)}
@@ -1067,6 +1268,7 @@ if(typeof finish==='function'){const _fi=finish;finish=function(){document.body.
 })();
 </script>
 <!-- ===== /FX2 LAYER ===== -->
+
 <!-- ===== FX3 LAYER: 3D flag + particle text ===== -->
 <style>
 .flagbox canvas.fx-3d{position:absolute;left:-6%;top:-12%;width:118%;height:124%;z-index:1;pointer-events:none}
@@ -1169,6 +1371,7 @@ if(card&&matchMedia('(hover:hover)').matches){addEventListener('pointermove',e=>
 })();
 </script>
 <!-- ===== /FX3 LAYER ===== -->
+
 <!-- ===== FX4 LAYER: richer homepage ===== -->
 <style>
 .x4-sec{padding:90px 0;border-top:1px solid var(--line);position:relative;overflow:hidden}
@@ -1319,6 +1522,7 @@ qa('.x4-rv').forEach(e=>io.observe(e));io.observe(qS);
 })();
 </script>
 <!-- ===== /FX4 LAYER ===== -->
+
 <!-- ===== fx5: kryefaqja kinematike ===== -->
 <style>
 .hero{position:relative;isolation:isolate}
@@ -1523,3 +1727,6 @@ function loop(t){requestAnimationFrame(loop);const dt=Math.min(50,t-last);last=t
 requestAnimationFrame(loop);
 })();
 </script>
+
+</body>
+</html>
