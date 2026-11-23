@@ -506,57 +506,53 @@ footer b{font-family:"Playfair Display",serif;color:var(--cream);font-size:16px}
   <use xlink:href="#al-a" width="100%" height="100%" transform="matrix(-1 0 0 1 640 0)"/>
 </svg></template>
 <script>
-/* live room over PeerJS (WebRTC) for hosting outside claude.ai */
+/* live room over public MQTT brokers (WebSocket) for hosting outside claude.ai */
 (function(){
 if(window.claude&&window.claude.use)return;
-const SRC=['https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js','https://cdn.jsdelivr.net/npm/peerjs@1.5.4/dist/peerjs.min.js'];
+const LIBS=['https://unpkg.com/mqtt@5.10.1/dist/mqtt.min.js','https://cdn.jsdelivr.net/npm/mqtt@5.10.1/dist/mqtt.min.js'];
+const BROKERS=['wss://broker.hivemq.com:8884/mqtt','wss://broker.emqx.io:8084/mqtt','wss://test.mosquitto.org:8081/mqtt'];
+const ROOT='kz2829nentori/v1/';
 let libP=null;
-function lib(){if(window.Peer)return Promise.resolve();return libP||(libP=new Promise((res,rej)=>{let i=0;const nx=()=>{if(i>=SRC.length){libP=null;return rej(new Error('lib'));}const s=document.createElement('script');s.src=SRC[i++];s.onload=()=>res();s.onerror=()=>{s.remove();nx();};document.head.appendChild(s);};nx();}));}
-const PFX='kz2829nentori-';
-function openPeer(id){return new Promise((res,rej)=>{let p;try{p=id?new Peer(id,{debug:0}):new Peer({debug:0});}catch(e){return rej(e);}let done=false;
-  p.on('open',()=>{if(done)return;done=true;res(p);});
-  p.on('error',e=>{if(done)return;done=true;try{p.destroy();}catch(_){}rej(e);});
-  setTimeout(()=>{if(done)return;done=true;try{p.destroy();}catch(_){}rej(new Error('timeout'));},15000);});}
+function lib(){if(window.mqtt)return Promise.resolve();return libP||(libP=new Promise((res,rej)=>{let i=0;const nx=()=>{if(i>=LIBS.length){libP=null;return rej(new Error('lib'));}const s=document.createElement('script');s.src=LIBS[i++];s.onload=()=>res();s.onerror=()=>{s.remove();nx();};document.head.appendChild(s);};nx();}));}
 async function join(name){
   await lib();
-  const hubId=PFX+String(name).replace(/[^a-z0-9-]/gi,'');
-  let peer,isHub=false;
-  try{peer=await openPeer(hubId);isHub=true;}
-  catch(e){if(!e||e.type!=='unavailable-id')throw e;peer=await openPeer(null);}
-  const me=peer.id;let mine={},alive=true,connected=false,conn=null,tries=0;
-  const others=new Map(),conns=new Map(),ph=[],ch=[];
-  const snap=()=>[{peer:me,isMe:true,sameTab:true,presence:mine},...[...others].map(([p,pr])=>({peer:p,isMe:false,sameTab:false,presence:pr}))];
-  const fire=()=>{const s=snap();ph.forEach(h=>setTimeout(()=>{try{h.ok({peers:s});}catch(e){console.warn(e);}},0));};
-  const setConn=c=>{connected=c;ch.forEach(h=>{try{h(c);}catch(e){}});};
-  const all=()=>{const m={};m[me]=mine;others.forEach((v,k)=>{m[k]=v;});return m;};
-  const bcast=()=>{const m=all();conns.forEach(c=>{try{if(c.open)c.send({t:'all',m});}catch(_){}});};
-  peer.on('disconnected',()=>{if(alive){try{peer.reconnect();}catch(_){}}});
-  if(isHub){
-    peer.on('connection',c=>{
-      c.on('open',()=>{conns.set(c.peer,c);try{c.send({t:'all',m:all()});}catch(_){}});
-      c.on('data',d=>{if(d&&d.t==='p'&&d.pr&&typeof d.pr==='object'&&!Array.isArray(d.pr)){others.set(c.peer,d.pr);fire();bcast();}});
-      const gone=()=>{conns.delete(c.peer);if(others.delete(c.peer)){fire();bcast();}};
-      c.on('close',gone);c.on('error',gone);});
-    setTimeout(()=>setConn(true),0);
-  }else{
-    const dial=()=>{if(!alive)return;conn=peer.connect(hubId,{reliable:true});let opened=false;
-      conn.on('open',()=>{opened=true;tries=0;setConn(true);try{conn.send({t:'p',pr:mine});}catch(_){}});
-      conn.on('data',d=>{if(d&&d.t==='all'&&d.m&&typeof d.m==='object'){others.clear();for(const k in d.m)if(k!==me)others.set(k,d.m[k]);fire();}});
-      const drop=()=>{if(!alive)return;if(connected)setConn(false);others.clear();fire();
-        if(opened)ph.forEach(h=>{try{h.err&&h.err();}catch(_){}});
-        if(tries++<20)setTimeout(dial,2500);};
-      conn.on('close',drop);conn.on('error',drop);};
-    dial();
-  }
+  const room=String(name).replace(/[^a-z0-9-]/gi,'');
+  const me='p'+Math.random().toString(36).slice(2,10)+Date.now().toString(36).slice(-4);
+  const base=ROOT+room+'/p/',myTopic=base+me;
+  let mine={},seq=0,alive=true,wasUp=false;
+  const maps=BROKERS.map(()=>new Map());const up=BROKERS.map(()=>false);const seen=new Map();
+  const ph=[],ch=[];
+  const merged=()=>{const m=new Map();maps.forEach(mp=>mp.forEach((v,k)=>{const c=m.get(k);if(!c||v.s>c.s)m.set(k,v);}));return m;};
+  const snap=()=>{const m=merged();const now=Date.now();return [{peer:me,isMe:true,sameTab:true,presence:mine},
+    ...[...m].filter(([k])=>k!==me&&now-(seen.get(k)||0)<75000).map(([k,v])=>({peer:k,isMe:false,sameTab:false,presence:v.pr}))];};
+  let ft=null;const fire=()=>{if(ft)return;ft=setTimeout(()=>{ft=null;const s=snap();ph.forEach(h=>{try{h.ok({peers:s});}catch(e){console.warn(e);}});},0);};
+  const anyUp=()=>up.some(Boolean);
+  const setConn=()=>{const c=anyUp();ch.forEach(h=>{try{h(c);}catch(_){}});if(c)wasUp=true;else if(wasUp&&alive)ph.forEach(h=>{try{h.err&&h.err();}catch(_){}});};
+  const payload=()=>JSON.stringify({s:seq,pr:mine});
+  const clients=BROKERS.map((url,i)=>{let c;try{c=mqtt.connect(url,{clientId:me+'_'+i,clean:true,keepalive:20,reconnectPeriod:2500,connectTimeout:8000,
+      will:{topic:myTopic,payload:'',qos:1,retain:true}});}catch(e){return null;}
+    c.on('connect',()=>{up[i]=true;setConn();c.subscribe(base+'+',{qos:1});c.publish(myTopic,payload(),{qos:1,retain:true});});
+    c.on('close',()=>{if(up[i]){up[i]=false;setConn();}});
+    c.on('offline',()=>{if(up[i]){up[i]=false;setConn();}});
+    c.on('error',()=>{});
+    c.on('message',(t,buf)=>{if(!t.startsWith(base))return;const k=t.slice(base.length);if(k===me)return;const s=buf&&buf.length?new TextDecoder().decode(buf):'';
+      if(!s){maps[i].delete(k);fire();return;}
+      try{const d=JSON.parse(s);if(d&&typeof d.s==='number'&&d.pr&&typeof d.pr==='object'&&!Array.isArray(d.pr)){maps[i].set(k,d);seen.set(k,Date.now());fire();}}catch(_){}});
+    return c;});
+  const pub=()=>{clients.forEach((c,i)=>{if(c&&up[i]){try{c.publish(myTopic,payload(),{qos:1,retain:true});}catch(_){}}});};
+  const hb=setInterval(()=>{if(!alive)return;pub();fire();},20000);
+  await new Promise((res,rej)=>{const t0=Date.now();const iv=setInterval(()=>{if(anyUp()){clearInterval(iv);setTimeout(res,600);}else if(Date.now()-t0>12000){clearInterval(iv);alive=false;clearInterval(hb);clients.forEach(c=>{try{c&&c.end(true);}catch(_){}});rej(new Error('no broker'));}},100);});
+  const leaveNow=()=>{clients.forEach((c,i)=>{if(c&&up[i]){try{c.publish(myTopic,'',{qos:0,retain:true});}catch(_){}}});};
+  addEventListener('pagehide',()=>{if(alive)leaveNow();});
   return {name,
-    presence:async patch=>{mine=JSON.parse(JSON.stringify(Object.assign({},mine,patch)));Object.keys(mine).forEach(k=>{if(mine[k]===null)delete mine[k];});
-      if(isHub)bcast();else if(conn&&conn.open){try{conn.send({t:'p',pr:mine});}catch(_){}}fire();},
+    presence:async patch=>{mine=JSON.parse(JSON.stringify(Object.assign({},mine,patch)));Object.keys(mine).forEach(k=>{if(mine[k]===null)delete mine[k];});seq++;pub();fire();},
     onPeers:(ok,err)=>{const h={ok,err};ph.push(h);setTimeout(()=>{try{ok({peers:snap()});}catch(_){}},0);return()=>{const i=ph.indexOf(h);if(i>=0)ph.splice(i,1);};},
-    onConnection:h=>{ch.push(h);setTimeout(()=>h(connected),0);return()=>{const i=ch.indexOf(h);if(i>=0)ch.splice(i,1);};},
-    peers:snap,connected:()=>connected,
-    leave:async()=>{alive=false;try{conns.forEach(c=>c.close());}catch(_){}try{conn&&conn.close();}catch(_){}try{peer.destroy();}catch(_){}}};
+    onConnection:h=>{ch.push(h);setTimeout(()=>h(anyUp()),0);return()=>{const i=ch.indexOf(h);if(i>=0)ch.splice(i,1);};},
+    peers:snap,connected:anyUp,
+    leave:async()=>{if(!alive)return;alive=false;clearInterval(hb);leaveNow();setTimeout(()=>clients.forEach(c=>{try{c&&c.end();}catch(_){}}),400);}};
 }
 window.claude={use:async n=>n==='room'?{join}:null};
+window.__kzJoin=join;
 })();
 </script>
 <script>
