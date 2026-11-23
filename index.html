@@ -1724,5 +1724,103 @@ requestAnimationFrame(loop);
 })();
 </script>
 
+<!-- ===== fx6: lojë live ku çdo grup ecën me ritmin e vet ===== -->
+<style>
+.x6-rank{margin:26px auto 0;max-width:560px;text-align:left}
+.x6-rank h3{font-family:"Playfair Display",serif;font-size:22px;margin:0 0 12px;text-align:center}
+.x6-row{display:flex;align-items:center;gap:12px;padding:12px 16px;border:1px solid var(--line);border-left:4px solid var(--c);border-radius:14px;background:rgba(255,255,255,.03);margin-bottom:10px}
+.x6-row .rk{width:26px;font-weight:800;color:var(--gold2)}
+.x6-row .nm{flex:1;font-weight:700}
+.x6-row .stt{font-size:12.5px;color:var(--muted)}
+.x6-row .stt.ok{color:#2fb36b}
+.x6-row b{font-family:"Playfair Display",serif;font-size:24px;min-width:34px;text-align:right}
+.x6-row.me{background:rgba(228,30,32,.08)}
+</style>
+<script>
+(function(){
+if(typeof onState!=='function'||typeof renderLobby!=='function')return;
+const ORIG_onState=onState,ORIG_renderLobby=renderLobby;
+let P=null; // local run: {r,idx,score,answered,done,wrongs,started}
+const N=()=>G.st.list.length;
+function prog(){if(!NR||!P)return;NR.presence({prog:{r:P.r,i:P.idx+(P.answered?1:0),s:P.score,d:P.done?1:0}}).catch(()=>{});}
+function badge(){return `<span class="badge fill" style="--c:${COLORS[G.g]}">Ju jeni: ${esc(G.st.names[G.g])}</span>`;}
+function pills(){$('qLeft').innerHTML=`<span class="pill">Pikët <b>${P.score}</b></span>`;$('qRight').innerHTML=`<span class="pill">Pyetja <b>${Math.min(P.idx+1,N())}</b> / ${N()}</span>`;}
+function renderQ(){
+  const st=G.st;P.answered=false;const q=ORDER[st.list[P.idx]];
+  $('cd').hidden=true;show('quiz');$('board').hidden=true;$('hint').hidden=false;
+  $('bar').style.width=(P.idx/N()*100)+'%';pills();drawQuestion(q,badge());
+  startTimer(st.timer,()=>{if(!P.answered)mpChoose(-1);});
+}
+function pickGroupView(){
+  show('quiz');$('board').hidden=true;$('cd').hidden=true;$('timer').hidden=true;$('qLeft').innerHTML='';$('qRight').innerHTML='';
+  $('qtext').textContent='Zgjidh grupin tënd për të filluar';$('answers').innerHTML='';$('fb').textContent='';$('explain').hidden=true;$('next').hidden=true;
+  $('badges').innerHTML='<div class="pickg">Grupi: '+G.st.names.map((nm,i)=>`<button onclick="setGroup(${i})" style="border-color:${COLORS[i]}">${esc(nm)}</button>`).join('')+'</div>';
+}
+function begin(){
+  const st=G.st;
+  if(G.g==null){pickGroupView();return;}
+  if(P&&P.r===st.round&&P.started){ if(P.done)showRes(); else renderQ(); return;}
+  P={r:st.round,idx:0,score:0,answered:false,done:false,wrongs:[],started:true};lastScores=null;prog();
+  show('quiz');$('board').hidden=true;$('qtext').textContent='';$('answers').innerHTML='';$('badges').innerHTML=badge();$('fb').textContent='';$('explain').hidden=true;$('timer').hidden=true;$('next').hidden=true;$('qLeft').innerHTML='';$('qRight').innerHTML='';
+  countdown(()=>{if(P&&P.r===st.round&&!P.done)renderQ();});
+}
+onState=function(force){
+  const st=G&&G.st;if(!st)return;
+  if(st.phase==='lobby'){if(P&&P.r!==st.round)P=null;return ORIG_onState(force);}
+  G.key='play'+st.round;begin();
+};
+hostStart=function(){const st=G.st;st.phase='q';st.qi=0;st.picks=Array(st.n).fill(null);G.myAns=null;pushHost();};
+hostCollect=function(){};
+hostReveal=function(){};
+mpChoose=function(i){
+  if(!P||P.answered||P.done||G.g==null)return;P.answered=true;stopTimer();
+  const q=ORDER[G.st.list[P.idx]];markAnswers(q.a,i);const ok=i===q.a;
+  if(ok){P.score++;$('fb').textContent=['Saktë! +1 pikë','Shumë mirë! +1 pikë','Bravo! +1 pikë'][Math.floor(Math.random()*3)];$('fb').className='fb ok';play('ok');}
+  else{P.wrongs.push({q,i});$('fb').textContent=i<0?'Koha mbaroi!':'Gabim!';$('fb').className='fb bad';play('bad');}
+  showExplain(q);pills();prog();
+  $('next').textContent=P.idx>=N()-1?'Shiko rezultatin →':'Vazhdo →';$('next').hidden=false;$('next').focus({preventScroll:true});
+};
+hostNext=function(){
+  if(!P||!P.answered)return;
+  if(P.idx>=N()-1){P.done=true;prog();$('bar').style.width='100%';play('win');showRes();return;}
+  P.idx++;renderQ();
+};
+setGroup=function(g){G.g=g;play('sel');if(G.host)pushHost();else NR.presence({g}).catch(()=>{});
+  if(G.st&&G.st.phase!=='lobby'){if(!P||!P.started)begin();}else ORIG_renderLobby();};
+function standings(){
+  const st=G.st,n=st.n,rows=[];
+  for(let g=0;g<n;g++){let best=null;
+    G.peers.forEach(p=>{const pg=p.sameTab?G.g:(p.presence&&p.presence.g);if(pg!==g)return;
+      const pr=p.sameTab?(P&&{r:P.r,i:P.idx+(P.answered?1:0),s:P.score,d:P.done?1:0}):(p.presence&&p.presence.prog);
+      if(!pr||pr.r!==st.round||!isInt(pr.s,0,48))return;
+      if(!best||pr.d>best.d||(pr.d===best.d&&pr.s>best.s))best=pr;});
+    if(best)rows.push({g,s:best.s,d:!!best.d,i:best.i});}
+  rows.sort((a,b)=>b.s-a.s||(b.d-a.d));return rows;
+}
+function rankHTML(){
+  const rows=standings(),N0=N();if(!rows.length)return '';
+  const allDone=rows.every(r=>r.d);
+  return `<div class="x6-rank"><h3>${allDone?'Renditja përfundimtare':'Renditja e grupeve'}</h3>${rows.map((r,k)=>{const rk=1+rows.filter(x=>x.s>r.s).length;
+    return `<div class="x6-row ${r.g===G.g?'me':''}" style="--c:${COLORS[r.g]}"><span class="rk">${rk}</span><div class="nm">${esc(G.st.names[r.g])}${r.g===G.g?' · ju':''}<div class="stt ${r.d?'ok':''}">${r.d?'✓ Përfundoi':'Duke luajtur… pyetja '+Math.min(N0,(r.i||0)+1)+' / '+N0}</div></div><b>${r.s}</b></div>`;}).join('')}</div>`;
+}
+let resShown=false;
+function showRes(){
+  stopTimer();const n=N(),score=P.score,pct=Math.round(score/n*100);
+  const msg=pct>=90?'Shkëlqyeshëm!':pct>=70?'Shumë mirë!':pct>=50?'Mirë!':'Vazhdo të mësosh!';
+  let h=`<div class="trophy">${TROPHY}</div><span class="eyebrow" style="margin-top:18px">${esc(G.st.names[G.g])}</span><h2>${msg}</h2><p class="sub">Grupi juaj mori <b>${score}</b> nga ${n} pikë.</p><div id="x6rank">${rankHTML()}</div>`;
+  h+=`<div class="actions">${G.host?'<button class="btn red big" onclick="hostRestart()">Luaj përsëri</button>':''}<button class="btn ghost big" onclick="goHome()">Kryefaqja</button></div>${G.host?'':'<p class="note">Nëse organizatori fillon lojë të re, do të kaloni automatikisht.</p>'}`;
+  if(P.wrongs.length)h+=`<div class="review"><h3>Mëso nga gabimet</h3>${P.wrongs.map(()=>`<div class="ritem"><p></p><div class="rr"><span class="y"></span><span class="c"></span></div><div class="ex"></div></div>`).join('')}</div>`;
+  $('resBox').innerHTML=h;
+  [...document.querySelectorAll('#resBox .ritem')].forEach((el,k)=>{const w=P.wrongs[k];el.querySelector('p').textContent=w.q.q;el.querySelector('.y').textContent=w.i<0?'Pa përgjigje':'Zgjodhët: '+w.q.o[w.i];el.querySelector('.c').textContent='E saktë: '+w.q.o[w.q.a];el.querySelector('.ex').textContent=w.q.e;});
+  show('results');if(pct>=70)confetti();
+}
+renderLobby=function(){
+  if(!G||G.mode!=='mp')return;
+  if(G.st&&G.st.phase!=='lobby'){if(P&&P.done&&$('results').classList.contains('active')){const el=$('x6rank');if(el)el.innerHTML=rankHTML();}return;}
+  ORIG_renderLobby();
+};
+})();
+</script>
+
 </body>
 </html>
